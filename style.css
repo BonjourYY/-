@@ -5,7 +5,7 @@
 }
 
 #canvas {
-  height: 100vh;
+  /* margin: 50px; */
+  display: block;
   background-color: rgba(0, 0, 0, 0.6);
-  position: relative;
 }
