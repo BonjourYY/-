@@ -9,3 +9,22 @@
   display: block;
   background-color: rgba(0, 0, 0, 0.6);
 }
+
+.actions,
+.actions.x {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+}
+
+.actions > #brush {
+  display: none;
+}
+
+.actions.x > #eraser {
+  display: none;
+}
+
+.actions.x > #brush {
+  display: inline-block;
+}
