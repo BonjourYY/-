@@ -9,18 +9,17 @@ var eraserEnabled = false;
 // 初始化canvas大小，并在拖动窗口时，自动设置canvas的大小。
 autoSetCanvasSize(canvas);
 
-listenToMouse(canvas);
+listenToUser(canvas);
 
-var actions = document.getElementsByClassName('actions')[0];
-
+pen.onclick = function () {
+  eraserEnabled = false;
+  eraser.classList.remove('active');
+  pen.classList.add('active');
+};
 eraser.onclick = function () {
   eraserEnabled = true;
-  actions.className = 'actions x';
-};
-
-brush.onclick = function () {
-  eraserEnabled = false;
-  actions.className = 'actions';
+  pen.classList.remove('active');
+  eraser.classList.add('active');
 };
 
 ////////////////////////////////////////
@@ -33,8 +32,9 @@ function autoSetCanvasSize(canvas) {
 }
 
 function initCanvas(canvas) {
-  canvas.width = document.documentElement.clientWidth;
-  canvas.height = document.documentElement.clientHeight;
+  var wrapper = document.getElementById('wrapper');
+  canvas.width = wrapper.clientWidth;
+  canvas.height = '700';
 }
 
 function drawLine(x1, y1, x2, y2) {
@@ -47,38 +47,82 @@ function drawLine(x1, y1, x2, y2) {
   ctx.closePath();
 }
 
-function listenToMouse(canvas) {
+function listenToUser(canvas) {
   var using = false;
   var lastPoint = { x: undefined, y: undefined };
 
-  canvas.onmousedown = function (x) {
-    var positionX = x.clientX;
-    var positionY = x.clientY;
-    using = true;
-    if (eraserEnabled) {
-      ctx.clearRect(positionX - 5, positionY - 5, 10, 10);
-    } else {
-      lastPoint = { x: positionX, y: positionY };
-      console.log(lastPoint);
-    }
-  };
+  // 特性检测
+  if (document.body.ontouchstart !== undefined) {
+    // 触屏设备
+    canvas.ontouchstart = function (x) {
+      var position = getMousePos(x.target, x.touches[0]);
+      using = true;
+      if (eraserEnabled) {
+        ctx.clearRect(position.x - 5, position.y - 5, 10, 10);
+      } else {
+        lastPoint = { x: position.x, y: position.y };
+        // console.log(lastPoint);
+      }
+    };
+    canvas.ontouchmove = function (x) {
+      var position = getMousePos(x.target, x.touches[0]);
+      if (!using) {
+        return;
+      }
+      if (eraserEnabled) {
+        ctx.clearRect(position.x - 5, position.y - 5, 10, 10);
+      } else {
+        var newPoint = { x: position.x, y: position.y };
+        drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y);
+        lastPoint = newPoint;
+      }
+    };
+    canvas.ontouchend = function () {
+      using = false;
+    };
+  } else {
+    // 非触屏设备
+    canvas.onmousedown = function (x) {
+      var position = getMousePos(x.target, x);
+      using = true;
+      if (eraserEnabled) {
+        ctx.clearRect(position.x - 5, position.y - 5, 10, 10);
+      } else {
+        lastPoint = { x: position.x, y: position.y };
+        console.log(lastPoint);
+      }
+    };
 
-  canvas.onmousemove = function (x) {
-    var positionX = x.clientX;
-    var positionY = x.clientY;
-    if (!using) {
-      return;
-    }
-    if (eraserEnabled) {
-      ctx.clearRect(positionX - 5, positionY - 5, 10, 10);
-    } else {
-      var newPoint = { x: positionX, y: positionY };
-      drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y);
-      lastPoint = newPoint;
-    }
-  };
+    canvas.onmousemove = function (x) {
+      var position = getMousePos(x.target, x);
+      if (!using) {
+        return;
+      }
+      if (eraserEnabled) {
+        ctx.clearRect(position.x - 5, position.y - 5, 10, 10);
+      } else {
+        console.log('1234');
+        var newPoint = { x: position.x, y: position.y };
+        drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y);
+        lastPoint = newPoint;
+      }
+    };
 
-  canvas.onmouseup = function (x) {
-    using = false;
+    canvas.onmouseup = function (x) {
+      using = false;
+    };
+  }
+}
+
+// document.onmousedown = function (evt) {
+//   console.log('1');
+//   console.log(getMousePos(canvas, evt));
+// };
+
+function getMousePos(canvas, evt) {
+  var rect = canvas.getBoundingClientRect();
+  return {
+    x: evt.clientX - rect.left,
+    y: evt.clientY - rect.top,
   };
 }
