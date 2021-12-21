@@ -13,17 +13,18 @@ autoSetCanvasSize(canvas);
 listenToUser(canvas);
 
 // 改变画笔颜色
+var colorValue = '#bcebdc';
 document.getElementsByClassName('optionsColor')[0].onclick = function (e) {
-  ctx.strokeStyle = e.target.id;
+  colorValue = e.target.id;
 };
 
 // 改变画笔粗细
-let linewidth;
+let linewidth = 5;
 document.getElementsByClassName('thin')[0].onclick = function () {
-  linewidth = 5;
+  linewidth = 10;
 };
 document.getElementsByClassName('thick')[0].onclick = function () {
-  linewidth = 10;
+  linewidth = 20;
 };
 
 // 清屏
@@ -70,6 +71,7 @@ function initCanvas(canvas) {
 }
 
 function drawLine(x1, y1, x2, y2) {
+  ctx.strokeStyle = colorValue;
   ctx.beginPath();
   ctx.moveTo(x1, y1);
   ctx.lineWidth = linewidth;
@@ -89,7 +91,7 @@ function listenToUser(canvas) {
       var position = getMousePos(x.target, x.touches[0]);
       using = true;
       if (eraserEnabled) {
-        ctx.clearRect(position.x - 5, position.y - 5, 10, 10);
+        ctx.clearRect(position.x - 5, position.y - 5, linewidth, linewidth);
       } else {
         lastPoint = { x: position.x, y: position.y };
         // console.log(lastPoint);
@@ -101,7 +103,7 @@ function listenToUser(canvas) {
         return;
       }
       if (eraserEnabled) {
-        ctx.clearRect(position.x - 5, position.y - 5, 10, 10);
+        ctx.clearRect(position.x - 5, position.y - 5, linewidth, linewidth);
       } else {
         var newPoint = { x: position.x, y: position.y };
         drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y);
@@ -117,7 +119,7 @@ function listenToUser(canvas) {
       var position = getMousePos(x.target, x);
       using = true;
       if (eraserEnabled) {
-        ctx.clearRect(position.x - 5, position.y - 5, 10, 10);
+        ctx.clearRect(position.x - 5, position.y - 5, linewidth, linewidth);
       } else {
         lastPoint = { x: position.x, y: position.y };
         console.log(lastPoint);
@@ -130,7 +132,7 @@ function listenToUser(canvas) {
         return;
       }
       if (eraserEnabled) {
-        ctx.clearRect(position.x - 5, position.y - 5, 10, 10);
+        ctx.clearRect(position.x - 5, position.y - 5, linewidth, linewidth);
       } else {
         console.log('1234');
         var newPoint = { x: position.x, y: position.y };
