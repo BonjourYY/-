@@ -9,7 +9,13 @@ var eraserEnabled = false;
 // 初始化canvas大小，并在拖动窗口时，自动设置canvas的大小。
 autoSetCanvasSize(canvas);
 
+// 监听用户操作
 listenToUser(canvas);
+
+// 改变画笔颜色
+document.getElementsByClassName('optionsColor')[0].onclick = function (e) {
+  ctx.strokeStyle = e.target.id;
+};
 
 pen.onclick = function () {
   eraserEnabled = false;
@@ -38,7 +44,6 @@ function initCanvas(canvas) {
 }
 
 function drawLine(x1, y1, x2, y2) {
-  ctx.strokeStyle = 'yellow';
   ctx.beginPath();
   ctx.moveTo(x1, y1);
   ctx.lineWidth = 5;
@@ -113,11 +118,6 @@ function listenToUser(canvas) {
     };
   }
 }
-
-// document.onmousedown = function (evt) {
-//   console.log('1');
-//   console.log(getMousePos(canvas, evt));
-// };
 
 function getMousePos(canvas, evt) {
   var rect = canvas.getBoundingClientRect();
