@@ -35,7 +35,7 @@ body {
     0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);
   display: flex;
   padding: 0 10px;
-  margin: 30px 0;
+  margin: 30px;
   flex-flow: row nowrap;
   justify-content: flex-start;
   align-items: center;
@@ -67,7 +67,7 @@ body {
   height: 30px;
   border-radius: 50%;
   margin-bottom: 10px;
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .optionsColor li.color1 {
@@ -81,4 +81,31 @@ body {
 }
 .optionsColor li.color4 {
   background-color: #f9d7d9;
+}
+
+#wrapper .set {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.set .sizes li {
+  background-color: #131310;
+  margin: 20px 0;
+  cursor: pointer;
+}
+
+.set .sizes li.thin {
+  background-color: #131310;
+  width: 40px;
+  height: 5px;
+  border-radius: 2px;
+}
+
+.set .sizes li.thick {
+  background-color: #131310;
+  width: 40px;
+  height: 8px;
+  border-radius: 2px;
 }

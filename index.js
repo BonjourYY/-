@@ -17,6 +17,32 @@ document.getElementsByClassName('optionsColor')[0].onclick = function (e) {
   ctx.strokeStyle = e.target.id;
 };
 
+// 改变画笔粗细
+let linewidth;
+document.getElementsByClassName('thin')[0].onclick = function () {
+  linewidth = 5;
+};
+document.getElementsByClassName('thick')[0].onclick = function () {
+  linewidth = 10;
+};
+
+// 清屏
+clear.onclick = function () {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+};
+
+// 下载
+download.onclick = function () {
+  var url = canvas.toDataURL('image/png');
+  console.log(url);
+  var a = document.createElement('a');
+  document.body.appendChild(a);
+  a.href = url;
+  a.download = 'download';
+  a.target = '_blank';
+  a.click();
+};
+
 pen.onclick = function () {
   eraserEnabled = false;
   eraser.classList.remove('active');
@@ -46,7 +72,7 @@ function initCanvas(canvas) {
 function drawLine(x1, y1, x2, y2) {
   ctx.beginPath();
   ctx.moveTo(x1, y1);
-  ctx.lineWidth = 5;
+  ctx.lineWidth = linewidth;
   ctx.lineTo(x2, y2);
   ctx.stroke();
   ctx.closePath();
